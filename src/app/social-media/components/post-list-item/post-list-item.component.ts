@@ -11,6 +11,8 @@ export class PostListItemComponent {
   @Input() post!: Post;
   @Output() postCommented = new EventEmitter<{comment:string, postId:number}>();
 
+  tempUser = { firstName : 'John', lastName: 'Doe'};
+
   onNewComment(comment: string) {
     this.postCommented.emit({comment, postId: this.post.id});
   }
