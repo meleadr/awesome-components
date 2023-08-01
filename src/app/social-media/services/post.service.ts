@@ -12,4 +12,7 @@ export class PostService {
     return this.http.get<Post[]>("http://localhost:3000/posts");
   }
 
+  addNewComment(postCommented: {comment:string, postId:number}): void {
+    console.log(postCommented);
+  }
 }
