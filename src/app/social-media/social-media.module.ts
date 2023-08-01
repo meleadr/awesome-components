@@ -4,11 +4,13 @@ import { SocialMediaRoutingModule } from './social-media-routing.module';
 import {PostService} from "./services/post.service";
 import {PostsResolver} from "./resolvers/posts.resolver";
 import { PostListComponent } from './components/post-list/post-list.component';
+import { PostListItemComponent } from './components/post-list-item/post-list-item.component';
 
 
 @NgModule({
   declarations: [
-    PostListComponent
+    PostListComponent,
+    PostListItemComponent
   ],
   imports: [
     CommonModule,
