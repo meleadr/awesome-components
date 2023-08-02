@@ -20,7 +20,7 @@
       <mat-radio-button value="phone">Phone</mat-radio-button>
     </mat-radio-group>
   </mat-card>
-  <mat-card class="form-card" [formGroup]="emailForm">
+  <mat-card class="form-card" [formGroup]="emailForm" *ngIf="showEmailCtrl$ | async">
     <mat-card-subtitle>Email</mat-card-subtitle>
     <div class="form-row">
       <mat-form-field appearance="fill">
@@ -30,6 +30,15 @@
       <mat-form-field appearance="fill">
         <mat-label>Confirmer votre adresse mail</mat-label>
         <input type="text" matInput formControlName="confirm">
+      </mat-form-field>
+    </div>
+  </mat-card>
+  <mat-card class="form-card" *ngIf="showPhoneCtrl$ | async">
+    <mat-card-subtitle>Téléphone</mat-card-subtitle>
+    <div class="form-row">
+      <mat-form-field appearance="fill">
+        <mat-label>Numéro de téléphone</mat-label>
+        <input type="text" matInput [formControl]="phoneCtrl">
       </mat-form-field>
     </div>
   </mat-card>
