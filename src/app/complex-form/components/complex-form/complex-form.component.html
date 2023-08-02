@@ -36,6 +36,7 @@
         <mat-error>{{getFormCtrlErrorText(confirmEmailCtrl)}}</mat-error>
       </mat-form-field>
     </div>
+    <small class="error-text" *ngIf="showEmailError$ | async">Les emails ne correspondent pas</small>
   </mat-card>
   <mat-card class="form-card" *ngIf="showPhoneCtrl$ | async">
     <mat-card-subtitle>Téléphone</mat-card-subtitle>
@@ -64,6 +65,7 @@
         <input type="password" matInput formControlName="confirmPassword">
       </mat-form-field>
     </div>
+    <small class="error-text" *ngIf="showPasswordError$ | async">Les mots de passe ne correspondent pas</small>
   </mat-card>
   <mat-card-actions *ngIf="mainForm.valid">
     <button mat-flat-button color="primary" (click)="onSubmitForm()" [disabled]="loading">S'inscrire</button>
