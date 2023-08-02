@@ -35,7 +35,6 @@ export class CommentsComponent implements OnInit{
 
   commentCtrl!: FormControl;
   animationStates : { [key: number]: 'default' | 'active' } = {};
-  listItemAnimationState: 'default' | 'active' = 'default';
 
   constructor(private formBuilder: FormBuilder) {
   }
