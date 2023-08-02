@@ -1,13 +1,35 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {Comment} from "../../../core/models/comment.model";
 import {FormBuilder, FormControl, Validators} from "@angular/forms";
-import {animate, state, style, transition, trigger} from "@angular/animations";
+import {
+  animate,
+  animateChild,
+  group,
+  query,
+  sequence,
+  stagger,
+  state,
+  style,
+  transition,
+  trigger, useAnimation
+} from "@angular/animations";
+import {flashAnimation} from "../../animations/flash.animation";
+import {slideAndFadeAnimation} from "../../animations/slide-and-fade.animation";
 
 @Component({
   selector: 'app-comments',
   templateUrl: './comments.component.html',
   styleUrls: ['./comments.component.scss'],
   animations: [
+    trigger('list', [
+      transition(':enter', [
+        query('@listItem', [
+          stagger(50, [
+            animateChild()
+          ])
+        ])
+      ])
+    ]),
     trigger('listItem', [
       state('default', style({
         transform: 'scale(1)',
@@ -24,6 +46,37 @@ import {animate, state, style, transition, trigger} from "@angular/animations";
       ]),
       transition('active => default', [
         animate('500ms ease-out')
+      ]),
+      transition(':enter', [
+        query('.comment-text, .comment-date', [
+          style({
+            opacity: 0
+          })
+        ]),
+        useAnimation(slideAndFadeAnimation, {
+          params: {
+            time: '500ms',
+            startColor: 'rgb(201,157,242)'
+          }
+        }),
+        group([
+          useAnimation(flashAnimation, {
+            params: {
+              time: '500ms',
+              flashColor: 'rgb(201,157,242)'
+            }
+          }),
+          query('.comment-text', [
+            animate('250ms', style({
+              opacity: 1
+            }))
+          ]),
+          query('.comment-date', [
+            animate('500ms', style({
+              opacity: 1
+            }))
+          ]),
+        ]),
       ])
     ])
   ]
@@ -48,6 +101,13 @@ export class CommentsComponent implements OnInit{
 
   onLeaveComment() {
     if(this.commentCtrl.invalid) return;
+    const maxId = Math.max(...this.comments.map(comment => comment.id));
+    this.comments.unshift({
+      id: this.comments.length,
+      userId: maxId + 1,
+      comment: this.commentCtrl.value,
+      createdDate: new Date().toISOString()
+    });
     this.newComment.emit(this.commentCtrl.value);
     this.commentCtrl.reset();
   }
