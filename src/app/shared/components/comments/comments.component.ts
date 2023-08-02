@@ -34,6 +34,7 @@ export class CommentsComponent implements OnInit{
   @Output() newComment = new EventEmitter<string>();
 
   commentCtrl!: FormControl;
+  animationStates : { [key: number]: 'default' | 'active' } = {};
   listItemAnimationState: 'default' | 'active' = 'default';
 
   constructor(private formBuilder: FormBuilder) {
@@ -41,6 +42,9 @@ export class CommentsComponent implements OnInit{
 
   ngOnInit() {
     this.commentCtrl = this.formBuilder.control('', [Validators.required, Validators.minLength(10)]);
+    for (let index in this.comments) {
+      this.animationStates[index] = 'default';
+    }
   }
 
   onLeaveComment() {
@@ -49,11 +53,11 @@ export class CommentsComponent implements OnInit{
     this.commentCtrl.reset();
   }
 
-  onListItemMouseEnter() {
-    this.listItemAnimationState = 'active';
+  onListItemMouseEnter(index:number) {
+    this.animationStates[index] = 'active';
   }
 
-  onListItemMouseLeave() {
-    this.listItemAnimationState = 'default';
+  onListItemMouseLeave(index:number) {
+    this.animationStates[index] = 'default';
   }
 }
