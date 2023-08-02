@@ -10,6 +10,7 @@ import {MatLineModule} from "@angular/material/core";
 import {MatCheckboxModule} from "@angular/material/checkbox";
 import {MatRadioModule} from "@angular/material/radio";
 import {MatProgressSpinnerModule} from "@angular/material/progress-spinner";
+import {MatSelectModule} from "@angular/material/select";
 
 
 
@@ -26,6 +27,7 @@ import {MatProgressSpinnerModule} from "@angular/material/progress-spinner";
     MatCheckboxModule,
     MatRadioModule,
     MatProgressSpinnerModule,
+    MatSelectModule
   ]
 })
 export class MaterialModule { }
