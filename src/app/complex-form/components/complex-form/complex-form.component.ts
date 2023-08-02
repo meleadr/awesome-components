@@ -1,6 +1,7 @@
 import {Component, OnInit} from '@angular/core';
-import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
+import {AbstractControl, FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
 import {map, Observable, startWith, tap} from "rxjs";
+import {ComplexFormService} from "../../services/complex-form.service";
 
 @Component({
   selector: 'app-complex-form',
@@ -8,6 +9,8 @@ import {map, Observable, startWith, tap} from "rxjs";
   styleUrls: ['./complex-form.component.scss']
 })
 export class ComplexFormComponent implements OnInit{
+
+  loading = false;
 
   mainForm!: FormGroup;
   personalInfoForm!: FormGroup;
@@ -23,7 +26,7 @@ export class ComplexFormComponent implements OnInit{
   showEmailCtrl$!: Observable<boolean>;
   showPhoneCtrl$!: Observable<boolean>;
 
-  constructor(private formBuilder: FormBuilder) {
+  constructor(private formBuilder: FormBuilder, private complexFormService:ComplexFormService) {
   }
 
   ngOnInit() {
@@ -99,7 +102,40 @@ export class ComplexFormComponent implements OnInit{
   }
 
   onSubmitForm() {
+    this.loading = true;
+    this.complexFormService.saveUserInfo(this.mainForm.value).pipe(
+      tap(saved => {
+        this.loading = false
+        if(saved){
+          this.resetForm();
+        }else{
+          console.log('Error while saving user info')
+        }
+      })
+    ).subscribe();
+  }
 
+  private resetForm() {
+    this.mainForm.reset();
+    this.contactPreferenceCtrl.patchValue('email');
+  }
+
+  getFormCtrlErrorText(ctrl:AbstractControl){
+    if(ctrl.hasError('required')){
+      return 'Ce champ est requis';
+    }
+    if(ctrl.hasError('minlength')){
+      return `Ce champ doit contenir au moins ${ctrl.getError('minlength').requiredLength} caractères`;
+    }
+    if(ctrl.hasError('maxlength')){
+      return `Ce champ doit contenir au plus ${ctrl.getError('maxlength').requiredLength} caractères`;
+    }
+    if(ctrl.hasError('email')){
+      return `Ce champ doit être une adresse email valide`;
+    }
+    else{
+      return 'Ce champ contient une erreur'
+    }
   }
 
 }
